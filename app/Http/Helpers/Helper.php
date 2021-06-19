@@ -36,7 +36,7 @@ function terbilang($angka)
 
 function tanggal_id($tgl, $tampil_hari = true)
 {
-    $nama_hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at','Sabtu'];
+    $nama_hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'];
     $nama_bulan = [
         1 =>
         'Januari',
@@ -60,10 +60,10 @@ function tanggal_id($tgl, $tampil_hari = true)
     $text = '';
 
     if ($tampil_hari) {
-        $urutan_hari = date('w', mktime(0,0,0, substr($tgl, 5, 2), $tanggal, $tahun));
+        $urutan_hari = date('w', mktime(0, 0, 0, substr($tgl, 5, 2), $tanggal, $tahun));
         $hari = $nama_hari[$urutan_hari];
         $text .= "$hari, $tanggal $bulan $tahun";
-    }else{
+    } else {
         $text .= "$tanggal $bulan $tahun";
     }
 

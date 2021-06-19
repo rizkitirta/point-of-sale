@@ -13,4 +13,8 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard-1', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/', fn () => redirect()->route('login'));
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
