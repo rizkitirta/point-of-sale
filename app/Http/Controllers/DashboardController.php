@@ -9,9 +9,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $data = Carbon::tomorrow()->format('l d-M-Y');
-
-        dd($data);
         return view('dashboard.index');
     }
 }

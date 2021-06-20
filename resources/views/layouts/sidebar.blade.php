@@ -15,7 +15,7 @@
                       alt="User Image">
               </div>
               <div class="info">
-                  <a href="#" class="d-block">Alexander Pierce</a>
+                  <a href="#" class="d-block">{{ Auth::user()->name }}</a>
               </div>
           </div>
 
@@ -39,10 +39,10 @@
                   <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                   <li class="nav-item">
-                      <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                      <a href="{{ route('dashboard') }}" class="nav-link">
+                          <i class="nav-icon fas fa-tachometer-alt"></i>
                           <p>
-                              Simple Link
+                              Dashboard
                               <span class="right badge badge-danger">New</span>
                           </p>
                       </a>
