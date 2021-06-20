@@ -20,7 +20,5 @@
         "postcss-import": "^14.0.1",
         "tailwindcss": "^2.0.1"
     },
-    "dependencies": {
-        "bootstrap": "^5.0.1"
-    }
+    "dependencies": {}
 }
