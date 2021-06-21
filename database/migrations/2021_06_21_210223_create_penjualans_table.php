@@ -14,7 +14,7 @@ class CreatePenjualansTable extends Migration
     public function up()
     {
         Schema::create('penjualans', function (Blueprint $table) {
-            $table->increments('id_penjualan');
+            $table->id();
             $table->unsignedBigInteger('id_member');
             $table->integer('total_item');
             $table->integer('total_harga');
@@ -23,6 +23,16 @@ class CreatePenjualansTable extends Migration
             $table->integer('diterima');
             $table->unsignedBigInteger('id_user');
             $table->timestamps();
+        });
+
+        Schema::table('penjualans', function (Blueprint $table) {
+            $table->foreign('id_member')->references('id')->on('members')
+            ->onDelete('restrict')
+            ->onUpdate('restrict');
+
+            $table->foreign('id_user')->references('id')->on('users')
+            ->onDelete('restrict')
+            ->onUpdate('restrict');
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class KategoriController extends Controller
@@ -20,15 +21,15 @@ class KategoriController extends Controller
 
     public function data()
     {
-        $data = Kategori::orderBy('id_kategori', 'desc')->get();
+        $data = Kategori::orderBy('id', 'desc')->get();
         return DataTables()
             ->of($data)
             ->addIndexColumn()
             ->addColumn('aksi', function ($data) {
                 return '
             <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('kategori.update', $data->id_kategori) . '`)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('kategori.update', $data->id_kategori) . '`)"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('kategori.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('kategori.update', $data->id) . '`)"><i class="fas fa-trash"></i></button>
             </div>
             ';
             })
@@ -44,9 +45,20 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        Kategori::create($request->all());
+        $rules = ['nama_kategori' => 'required|string'];
+        $message = ['nama_kategori.required' => ' Kolom kategori tidak boleh kosong!'];
 
-        return response()->json('Data Berhasil Disimpan', 200);
+        $validator = Validator::make($request->all(),$rules, $message);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+
+        $data = Kategori::create($request->all());
+        if ($data) {
+            return response()->json(['message' => 'Data berhasil ditambahkan'], 200);
+        }else{
+            return response()->json(['message' => 'Data gagal ditambahkan'], 422);
+        }
     }
 
     /**
@@ -90,6 +102,10 @@ class KategoriController extends Controller
         $data = Kategori::find($id);
         $data->delete();
 
-        return response()->json('Data Berhasil Dihapus!', 204);
+        if ($data) {
+            return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        }else{
+            return response()->json(['message' => 'Data gagal dihapus'], 422);
+        }
     }
 }

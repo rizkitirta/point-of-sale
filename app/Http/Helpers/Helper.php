@@ -69,3 +69,8 @@ function tanggal_id($tgl, $tampil_hari = true)
 
     return $text;
 }
+
+
+function kode($value,$angka = null) {
+    return sprintf("%0" . $angka . "s" . $value);
+}

@@ -14,8 +14,9 @@ class CreateProduksTable extends Migration
     public function up()
     {
         Schema::create('produks', function (Blueprint $table) {
-            $table->increments('id_produk');
+            $table->id();
             $table->unsignedBigInteger('id_kategori');
+            $table->integer('kode_produk');
             $table->string('nama_produk')->unique();
             $table->string('merek')->nullable();
             $table->integer('harga_beli');
@@ -23,6 +24,12 @@ class CreateProduksTable extends Migration
             $table->integer('harga_jual');
             $table->integer('stok');
             $table->timestamps();
+        });
+
+        Schema::table('produks', function (Blueprint $table) {
+            $table->foreign('id_kategori')->references('id')->on('kategoris')
+            ->onDelete('restrict')
+            ->onUpdate('restrict');
         });
     }
 

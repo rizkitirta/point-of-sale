@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\ProdukController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,20 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::group(['middleware' => 'auth'], function () {
+    //Kategori
     Route::get('kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
     Route::resource('kategori', KategoriController::class)->except(['create', 'edit']);
+
+    //Produk
+    Route::get('produk/data', [ProdukController::class, 'data'])->name('produk.data');
+    Route::resource('produk', ProdukController::class)->except(['create', 'edit']);
 });
+
+// Route::get('user', function(){
+//     User::create([
+//         'name' => 'User',
+//         'email' => 'user@gmail.com',
+//         'password' => bcrypt('useraja123'),
+//         'level' => 0,
+//     ]);
+// });

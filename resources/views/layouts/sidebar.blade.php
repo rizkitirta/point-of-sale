@@ -55,6 +55,14 @@
                           </p>
                       </a>
                   </li>
+                  <li class="nav-item">
+                      <a href="{{ route('produk.index') }}" class="nav-link">
+                        <i class="fas fa-cube nav-icon"></i>
+                          <p>
+                              Produk
+                          </p>
+                      </a>
+                  </li>
               </ul>
           </nav>
           <!-- /.sidebar-menu -->

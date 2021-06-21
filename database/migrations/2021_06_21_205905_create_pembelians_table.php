@@ -14,13 +14,19 @@ class CreatePembeliansTable extends Migration
     public function up()
     {
         Schema::create('pembelians', function (Blueprint $table) {
-            $table->increments('id_pembelian');
+            $table->id();
             $table->unsignedBigInteger('id_supplier');
             $table->integer('total_item');
             $table->integer('total_harga');
             $table->tinyInteger('diskon')->default(0);
             $table->integer('bayar');
             $table->timestamps();
+        });
+
+        Schema::table('pembelians', function (Blueprint $table) {
+            $table->foreign('id_supplier')->references('id')->on('suppliers')
+            ->onDelete('restrict')
+            ->onUpdate('restrict');
         });
     }
 

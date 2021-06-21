@@ -1,13 +1,13 @@
 @extends('layouts.master')
-@section('page', 'Kategori')
-@section('title', 'Kategori')
-@section('breadcrumb', 'Kategori')
+@section('page', 'produk')
+@section('title', 'produk')
+@section('breadcrumb', 'produk')
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <button onclick="addForm('{{ route('kategori.store') }}')" class="btn btn-sm btn-primary shadow">
+                    <button onclick="addForm('{{ route('produk.store') }}')" class="btn btn-sm btn-primary shadow">
                         <i class="fa fa-plus-circle"></i> Tambah</button>
                 </div>
                 <div class="card-body">
@@ -15,7 +15,14 @@
                         <thead>
                             <tr>
                                 <th width="5%">No</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
                                 <th>Kategori</th>
+                                <th>Merek</th>
+                                <th>Harga Beli</th>
+                                <th>Harga Jual</th>
+                                <th>Diskon</th>
+                                <th>Stok</th>
                                 <th width="5%">
                                     <li class="fa fa-cog"></li>
                                     Aksi
@@ -29,7 +36,7 @@
             </div>
         </div>
     </div>
-    @include('kategori.form')
+    @include('produk.form')
 @endsection
 @push('script')
     <script>
@@ -48,7 +55,7 @@
                 autoWidth: false,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('kategori.data') }}'
+                    url: '{{ route('produk.data') }}'
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -56,7 +63,28 @@
                         sortable: false
                     },
                     {
-                        data: 'nama_kategori'
+                        data: 'kode'
+                    },
+                    {
+                        data: 'nama_produk'
+                    },
+                    {
+                        data: 'id_kategori'
+                    },
+                    {
+                        data: 'merek'
+                    },
+                    {
+                        data: 'harga_beli'
+                    },
+                    {
+                        data: 'harga_jual'
+                    },
+                    {
+                        data: 'diskon'
+                    },
+                    {
+                        data: 'stok'
                     },
                     {
                         data: 'aksi',
@@ -95,27 +123,27 @@
         //Call add modal
         function addForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Tambah Kategori')
+            $('#modal-form .modal-title').text('Tambah produk')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('post')
-            $('#modal-form [name=nama_kategori]').focus()
+            $('#modal-form [name=nama_produk]').focus()
         }
 
         //Call edit modal
         function editForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Edit Kategori')
+            $('#modal-form .modal-title').text('Edit produk')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('put')
-            $('#modal-form [name=nama_kategori]').focus()
+            $('#modal-form [name=nama_produk]').focus()
 
             $.get(url)
                 .done((response) => {
-                    $('#modal-form [name="nama_kategori"]').val(response.nama_kategori)
+                    $('#modal-form [name="nama_produk"]').val(response.nama_produk)
                 })
                 .fail((errors) => {
                     alert('Terjadi Kesalahan!')
@@ -152,6 +180,5 @@
                 }
             })
         }
-
     </script>
 @endpush
