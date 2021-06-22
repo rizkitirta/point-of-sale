@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">
                     <button onclick="addForm('{{ route('kategori.store') }}')" class="btn btn-sm btn-primary shadow">
                         <i class="fa fa-plus-circle"></i> Tambah</button>
@@ -152,6 +152,5 @@
                 }
             })
         }
-
     </script>
 @endpush

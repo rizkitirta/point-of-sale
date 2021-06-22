@@ -49,7 +49,7 @@
                   </li>
                   <li class="nav-item">
                       <a href="{{ route('kategori.index') }}" class="nav-link">
-                        <i class="fas fa-cube nav-icon"></i>
+                          <i class="fas fa-cube nav-icon"></i>
                           <p>
                               Kategori
                           </p>
@@ -57,7 +57,7 @@
                   </li>
                   <li class="nav-item">
                       <a href="{{ route('produk.index') }}" class="nav-link">
-                        <i class="fas fa-cube nav-icon"></i>
+                          <i class="fas fa-cube nav-icon"></i>
                           <p>
                               Produk
                           </p>

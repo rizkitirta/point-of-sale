@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">
                     <button onclick="addForm('{{ route('produk.store') }}')" class="btn btn-sm btn-primary shadow">
                         <i class="fa fa-plus-circle"></i> Tambah</button>
@@ -69,7 +69,7 @@
                         data: 'nama_produk'
                     },
                     {
-                        data: 'id_kategori'
+                        data: 'nama_kategori'
                     },
                     {
                         data: 'merek'
@@ -144,6 +144,13 @@
             $.get(url)
                 .done((response) => {
                     $('#modal-form [name="nama_produk"]').val(response.nama_produk)
+                    $('#modal-form [name="merek"]').val(response.merek)
+                    $('#modal-form [name="id_kategori"]').val(response.id_kategori)
+                    $('#modal-form [name="kode"]').val(response.kode)
+                    $('#modal-form [name="harga_beli"]').val(response.harga_beli)
+                    $('#modal-form [name="harga_jual"]').val(response.harga_jual)
+                    $('#modal-form [name="diskon"]').val(response.diskon)
+                    $('#modal-form [name="stok"]').val(response.stok)
                 })
                 .fail((errors) => {
                     alert('Terjadi Kesalahan!')
@@ -176,7 +183,6 @@
                             alert('Data gagal dihapus!')
                             return;
                         })
-
                 }
             })
         }

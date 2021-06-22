@@ -38,19 +38,35 @@ class ProdukController extends Controller
 
     public function data()
     {
-        $data = Produk::orderBy('id', 'desc')->get();
+        $data = Produk::leftjoin('kategoris', 'kategoris.id', 'produks.id_kategori')
+            ->select('produks.*', 'nama_kategori')
+            ->orderBy('id', 'desc')
+            ->get();
+
         return DataTables()
             ->of($data)
             ->addIndexColumn()
+            ->addColumn('kode', function ($data) {
+                return '<h5><span class="badge badge-secondary">' . $data->kode . '</span></h5>';
+            })
+            ->addColumn('harga_beli', function ($data) {
+                return format_uang($data->harga_beli);
+            })
+            ->addColumn('harga_jual', function ($data) {
+                return format_uang($data->harga_jual);
+            })
+            ->addColumn('stok', function ($data) {
+                return format_uang($data->stok);
+            })
             ->addColumn('aksi', function ($data) {
                 return '
             <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('kategori.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('kategori.update', $data->id) . '`)"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('produk.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('produk.destroy', $data->id) . '`)"><i class="fas fa-trash"></i></button>
             </div>
             ';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'kode'])
             ->make(true);
     }
 
@@ -122,11 +138,10 @@ class ProdukController extends Controller
     public function update(Request $request, $id)
     {
         $data = Produk::find($id);
-        $data->nama_kategori = $request->nama_kategori;
-        $data->update();
+        $data->update($request->all());
 
 
-        return response()->json('Data Berhasil Disimpan', 200);
+        return response()->json(['message' => 'Data Berhasil Disimpan'], 200);
     }
 
     /**
