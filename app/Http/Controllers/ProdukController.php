@@ -46,6 +46,9 @@ class ProdukController extends Controller
         return DataTables()
             ->of($data)
             ->addIndexColumn()
+            ->addColumn('select_all', function ($data) {
+                return '<input type="checkbox" name="id_produk[]" value="' . $data->id . '">';
+            })
             ->addColumn('kode', function ($data) {
                 return '<h5><span class="badge badge-secondary">' . $data->kode . '</span></h5>';
             })
@@ -66,7 +69,7 @@ class ProdukController extends Controller
             </div>
             ';
             })
-            ->rawColumns(['aksi', 'kode'])
+            ->rawColumns(['aksi', 'kode', 'select_all'])
             ->make(true);
     }
 
@@ -79,7 +82,7 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nama_produk' => 'required|string',
+            'nama_produk' => 'required|unique:produks,nama_produk',
             'merek' => 'required|string',
             'id_kategori' => 'required|integer',
             'kode' => 'required|string',
@@ -90,6 +93,7 @@ class ProdukController extends Controller
         ];
         $message = [
             'nama_produk.required' => ' Kolom nama tidak boleh kosong!',
+            'nama_produk.unique' => ' Nama produk sudah digunakan!',
             'merek.required' => ' Kolom merek tidak boleh kosong!',
             'id_kategori.required' => ' Kolom kategori tidak boleh kosong!',
             'id_kategori.integer' => ' Kolom kategori berupa integer!',
@@ -160,5 +164,15 @@ class ProdukController extends Controller
         } else {
             return response()->json(['message' => 'Data gagal dihapus'], 422);
         }
+    }
+
+    public function deleteSelected(Request $request)
+    {
+        foreach ($request->id_produk as $id) {
+            $produk = Produk::find($id);
+            $produk->delete();
+        }
+
+        return response()->json(['message'=> 'Data Yang Dipilih Berhasil Dihapus!']);
     }
 }

@@ -7,31 +7,41 @@
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header">
-                    <button onclick="addForm('{{ route('produk.store') }}')" class="btn btn-sm btn-primary shadow">
-                        <i class="fa fa-plus-circle"></i> Tambah</button>
+                    <div class="btn-group" role="group" aria-label="Button group">
+                        <button type="button" onclick="addForm('{{ route('produk.store') }}')"
+                            class="btn btn-sm btn-primary shadow">
+                            <i class="fa fa-plus-circle"></i> Tambah</button>
+                        <button type="button" onclick="deleteSelected('{{ route('produk.deleteSelected') }}')"
+                            class="btn btn-sm btn-danger shadow">
+                            <i class="fas fa-trash-alt"></i> Delete Selected</button>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-light table-responsive table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th width="5%">No</th>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Kategori</th>
-                                <th>Merek</th>
-                                <th>Harga Beli</th>
-                                <th>Harga Jual</th>
-                                <th>Diskon</th>
-                                <th>Stok</th>
-                                <th width="5%">
-                                    <li class="fa fa-cog"></li>
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <form class="form-produk">
+                        @csrf
+                        <table class="table table-light table-responsive table-striped table-bordered" id="table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" name="select_all" id="select_all"></th>
+                                    <th width="5%">No</th>
+                                    <th>Kode</th>
+                                    <th>Nama</th>
+                                    <th>Kategori</th>
+                                    <th>Merek</th>
+                                    <th>Harga Beli</th>
+                                    <th>Harga Jual</th>
+                                    <th>Diskon</th>
+                                    <th>Stok</th>
+                                    <th width="5%">
+                                        <li class="fa fa-cog"></li>
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
@@ -42,6 +52,7 @@
     <script>
         let table;
 
+        //Inisialisasi Toaster
         var Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -49,8 +60,10 @@
             timer: 3000
         });
 
+
+        //Datatable
         $(function() {
-            table = $('.table').DataTable({
+            table = $('#table').DataTable({
                 processing: true,
                 autoWidth: false,
                 serverSide: true,
@@ -58,6 +71,11 @@
                     url: '{{ route('produk.data') }}'
                 },
                 columns: [{
+                        data: 'select_all',
+                        searchable: false,
+                        sortable: false
+                    },
+                    {
                         data: 'DT_RowIndex',
                         searchable: false,
                         sortable: false
@@ -95,6 +113,13 @@
             })
         })
 
+        // //validasi click btn
+        // $('#btn-save').click(function () {
+        //     $('#btn-save').attr('disabled',true)
+        // })
+
+
+        //Store
         $('#modal-form').on('submit', function(e) {
             if (!e.preventDefault()) {
                 $.ajax({
@@ -103,6 +128,11 @@
                         data: $('#modal-form form').serialize()
                     })
                     .done((response) => {
+                        if (!this.beenSubmitted) {
+                            this.beenSubmitted = true;
+                            form.submit();
+                        }
+
                         $('#modal-form').modal('hide')
                         table.ajax.reload()
                         Toast.fire({
@@ -185,6 +215,35 @@
                         })
                 }
             })
+        }
+
+
+        //Select all checkbox
+        $('[name=select_all]').click(function() {
+            $(':checkbox').prop('checked', this.checked)
+        })
+
+
+        function deleteSelected(url) {
+            if ($('input:checked').length > 1) {
+                if (confirm('Apakah anda yakin?')) {
+                    $.post(url, $('.form-produk').serialize())
+                    .done((response) => {
+                        console.log(response)
+                        table.ajax.reload()
+                        Swal.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        )
+                    })
+                    .fail((errors) => {
+                        console.log(errors)
+                        alert('Tidak dapat mengahpus data!')
+                        return;
+                    })
+                }
+            }
         }
     </script>
 @endpush
