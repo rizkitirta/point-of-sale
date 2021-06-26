@@ -7,17 +7,20 @@
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header">
+                    <button type="button" onclick="addForm('{{ route('produk.store') }}')"
+                    class="btn btn-sm btn-primary shadow float-right">
+                    <i class="fa fa-plus-circle"></i> Tambah</button>
                     <div class="btn-group" role="group" aria-label="Button group">
-                        <button type="button" onclick="addForm('{{ route('produk.store') }}')"
-                            class="btn btn-sm btn-primary shadow">
-                            <i class="fa fa-plus-circle"></i> Tambah</button>
+                        <button type="button" onclick="cetakBarcode('{{ route('produk.cetakBarcode') }}')"
+                            class="btn btn-sm btn-secondary shadow">
+                            <i class="fas fa-file-pdf"></i> Cetak</button>
                         <button type="button" onclick="deleteSelected('{{ route('produk.deleteSelected') }}')"
                             class="btn btn-sm btn-danger shadow">
                             <i class="fas fa-trash-alt"></i> Delete Selected</button>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="form-produk">
+                    <form class="form-produk" method="POST">
                         @csrf
                         <table class="table table-light table-responsive table-striped table-bordered" id="table">
                             <thead>
@@ -224,6 +227,7 @@
         })
 
 
+        //Delete multiple
         function deleteSelected(url) {
             if ($('input:checked').length > 1) {
                 if (confirm('Apakah anda yakin?')) {
@@ -243,6 +247,23 @@
                         return;
                     })
                 }
+            }
+        }
+
+
+        //Cetak barcode
+        function cetakBarcode(url) {
+            if ($('input:checked').length < 1) {
+                alert('Pilih data yang akan dicetak!')
+                return;
+            }else if($('input:checked').length < 3){
+                alert('Pilih min 3 data yang akan dicetak!')
+                return;
+            }else{
+                $('.form-produk')
+                .attr('target','_blank')
+                .attr('action', url)
+                .submit()
             }
         }
     </script>
