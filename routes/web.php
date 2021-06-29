@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProdukController;
 
 /*
@@ -32,6 +33,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('produk/cetak-barcode', [ProdukController::class, 'cetakBarcode'])->name('produk.cetakBarcode');
     Route::post('produk/delete-selected', [ProdukController::class, 'deleteSelected'])->name('produk.deleteSelected');
     Route::resource('produk', ProdukController::class)->except(['create', 'edit']);
+
+    //Member
+    Route::get('member/data', [MemberController::class, 'data'])->name('member.data');
+    Route::post('member/cetak-barcode', [MemberController::class, 'cetakBarcode'])->name('member.cetakBarcode');
+    Route::post('member/delete-selected', [MemberController::class, 'deleteSelected'])->name('member.deleteSelected');
+    Route::resource('member', MemberController::class)->except(['create', 'edit']);
 });
 
 // Route::get('user', function(){

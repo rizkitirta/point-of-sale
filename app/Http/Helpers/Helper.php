@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 function format_uang($angka)
 {
     return number_format($angka, 0, ',', '.');
@@ -73,4 +75,23 @@ function tanggal_id($tgl, $tampil_hari = true)
 
 function kode($value,$angka = null) {
     return sprintf("%0" . $angka . "s" . $value);
+}
+
+
+function autoNumber($modelCount,$modelLast,$query)
+{
+    $tanggal = Carbon::now()->format('Y-m-d');
+        $now = Carbon::now();
+        $thn_bulan = $now->year . $now->month;
+        $cek_number = $modelCount;
+        if ($cek_number == 0) {
+            $no_urut = 1001;
+            $number = 'MB' . $thn_bulan . $no_urut;
+            //dd($number);
+        } else {
+            $no_urut = (int)substr($query,-1) + 1;
+            $number = 'MB' . $thn_bulan . $no_urut;
+        }
+
+        return $number;
 }
