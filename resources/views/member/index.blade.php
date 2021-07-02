@@ -1,34 +1,31 @@
 @extends('layouts.master')
-@section('page', 'member')
-@section('title', 'member')
-@section('breadcrumb', 'member')
+@section('page', 'Kategori')
+@section('title', 'Kategori')
+@section('breadcrumb', 'Kategori')
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header">
-                    <button type="button" onclick="addForm('{{ route('member.store') }}')"
-                    class="btn btn-sm btn-primary shadow float-right">
-                    <i class="fa fa-plus-circle"></i> Tambah</button>
-                    <div class="btn-group" role="group" aria-label="Button group">
-                        <button type="button" onclick="cetakBarcode('{{ route('member.cetakBarcode') }}')"
-                            class="btn btn-sm btn-secondary shadow">
-                            <i class="fas fa-file-pdf"></i> Cetak</button>
-                        <button type="button" onclick="deleteSelected('{{ route('member.deleteSelected') }}')"
-                            class="btn btn-sm btn-danger shadow">
-                            <i class="fas fa-trash-alt"></i> Delete Selected</button>
-                    </div>
+                    <button type="button" onclick="deleteSelected('{{ route('member.deleteSelected') }}')"
+                        class="btn btn-danger shadow">
+                        <i class="fas fa-trash-alt"></i> Delete Selected</button>
+                    <button onclick="cetakMember('{{ route('member.cetak') }}')" class="btn btn-info"><i
+                            class="fas fa-id-card nav-icon"></i> Cetak Member</button>
+                    <button onclick="addForm('{{ route('member.store') }}')" class="btn btn-primary shadow float-right">
+                        <i class="fa fa-plus-circle"></i> Tambah</button>
+
                 </div>
                 <div class="card-body">
-                    <form class="form-member" method="POST">
+                    <form action="" method="post" id="form-member">
                         @csrf
-                        <table class="table table-light table-responsive table-striped table-bordered" id="table">
+                        <table class="table table-light table-responsive table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" name="select_all" id="select_all"></th>
                                     <th width="5%">No</th>
-                                    <th>Kode member</th>
-                                    <th>Nama</th>
+                                    <th>Kategori</th>
+                                    <th>Kode</th>
                                     <th>Telpon</th>
                                     <th>Alamat</th>
                                     <th width="5%">
@@ -51,7 +48,6 @@
     <script>
         let table;
 
-        //Inisialisasi Toaster
         var Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -59,10 +55,8 @@
             timer: 3000
         });
 
-
-        //Datatable
         $(function() {
-            table = $('#table').DataTable({
+            table = $('.table').DataTable({
                 processing: true,
                 autoWidth: false,
                 serverSide: true,
@@ -72,7 +66,7 @@
                 columns: [{
                         data: 'select_all',
                         searchable: false,
-                        sortable: false
+                        sortable: false,
                     },
                     {
                         data: 'DT_RowIndex',
@@ -80,10 +74,10 @@
                         sortable: false
                     },
                     {
-                        data: 'kode_member'
+                        data: 'nama'
                     },
                     {
-                        data: 'nama'
+                        data: 'kode'
                     },
                     {
                         data: 'no_telpon'
@@ -100,13 +94,6 @@
             })
         })
 
-        // //validasi click btn
-        // $('#btn-save').click(function () {
-        //     $('#btn-save').attr('disabled',true)
-        // })
-
-
-        //Store
         $('#modal-form').on('submit', function(e) {
             if (!e.preventDefault()) {
                 $.ajax({
@@ -132,37 +119,33 @@
             }
         })
 
+
         //Call add modal
         function addForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Tambah member')
+            $('#modal-form .modal-title').text('Tambah Kategori')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('post')
-            $('#modal-form [name=nama]').focus()
+            $('#modal-form [name=nama_kategori]').focus()
         }
 
         //Call edit modal
         function editForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Edit member')
+            $('#modal-form .modal-title').text('Edit Kategori')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('put')
-            $('#modal-form [name=nama]').focus()
+            $('#modal-form [name=nama_kategori]').focus()
 
             $.get(url)
                 .done((response) => {
                     $('#modal-form [name="nama"]').val(response.nama)
-                    $('#modal-form [name="merek"]').val(response.merek)
-                    $('#modal-form [name="id_kategori"]').val(response.id_kategori)
-                    $('#modal-form [name="kode_member"]').val(response.kode_member)
-                    $('#modal-form [name="harga_beli"]').val(response.harga_beli)
-                    $('#modal-form [name="harga_jual"]').val(response.harga_jual)
-                    $('#modal-form [name="diskon"]').val(response.diskon)
-                    $('#modal-form [name="stok"]').val(response.stok)
+                    $('#modal-form [name="no_telpon"]').val(response.no_telpon)
+                    $('#modal-form [name="alamat"]').val(response.alamat)
                 })
                 .fail((errors) => {
                     alert('Terjadi Kesalahan!')
@@ -205,44 +188,35 @@
             $(':checkbox').prop('checked', this.checked)
         })
 
-
-        //Delete multiple
+        //Delete selected
         function deleteSelected(url) {
             if ($('input:checked').length > 1) {
                 if (confirm('Apakah anda yakin?')) {
-                    $.post(url, $('.form-member').serialize())
-                    .done((response) => {
-                        console.log(response)
-                        table.ajax.reload()
-                        Swal.fire(
-                            'Deleted!',
-                            'Your data has been deleted.',
-                            'success'
-                        )
-                    })
-                    .fail((errors) => {
-                        console.log(errors)
-                        alert('Tidak dapat mengahpus data!')
-                        return;
-                    })
+                    $.post(url, $('#form-member').serialize())
+                        .done((res) => {
+                            console.log(res)
+                            table.ajax.reload()
+                            Swal.fire('Deleted!', res.message, 'success')
+                        })
+                        .fail((error) => {
+                            console.log(res.message)
+                            alert('Tidak dapat mengahpus data!')
+                            return;
+                        })
                 }
             }
         }
 
-
-        //Cetak barcode
-        function cetakBarcode(url) {
+        //Cetak member'
+        function cetakMember(url) {
             if ($('input:checked').length < 1) {
-                alert('Pilih data yang akan dicetak!')
+                alert('Pilih member yang akan dicetak!')
                 return;
-            }else if($('input:checked').length < 3){
-                alert('Pilih min 3 data yang akan dicetak!')
-                return;
-            }else{
-                $('.form-member')
-                .attr('target','_blank')
-                .attr('action', url)
-                .submit()
+            } else {
+                $('#form-member')
+                    .attr('target', '_blank')
+                    .attr('action', url)
+                    .submit()
             }
         }
     </script>

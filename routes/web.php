@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProdukController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,16 +37,16 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Member
     Route::get('member/data', [MemberController::class, 'data'])->name('member.data');
-    Route::post('member/cetak-barcode', [MemberController::class, 'cetakBarcode'])->name('member.cetakBarcode');
+    Route::post('member/cetak-member', [MemberController::class, 'cetakMember'])->name('member.cetak');
     Route::post('member/delete-selected', [MemberController::class, 'deleteSelected'])->name('member.deleteSelected');
     Route::resource('member', MemberController::class)->except(['create', 'edit']);
 });
 
 // Route::get('user', function(){
 //     User::create([
-//         'name' => 'User',
-//         'email' => 'user@gmail.com',
-//         'password' => bcrypt('useraja123'),
-//         'level' => 0,
+//         'name' => 'Admin',
+//         'email' => 'admin@gmail.com',
+//         'password' => bcrypt('adminaja'),
+//         'level' => 1,
 //     ]);
 // });

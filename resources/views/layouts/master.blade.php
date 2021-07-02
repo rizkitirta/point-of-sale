@@ -23,6 +23,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <style type="text/css">
+        .preloader {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 9999;
+          background-color: #fff;
+        }
+        .preloader .loading {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%,-50%);
+          font: 14px arial;
+        }
+        </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -59,6 +77,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="content">
                 <div class="container-fluid">
                     @yield('content')
+                    <div class="preloader">
+                        <div class="loading">
+                          <img src="{{ asset('images/settings.gif') }}" width="80">
+                          <p>Harap Tunggu</p>
+                        </div>
+                    </div>
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content -->
@@ -107,6 +131,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     {{-- <script src="{{ asset('AdminLTE/dist/js/pages/dashboard2.js') }}"></script> --}}
     <!-- SweetAlert2 -->
     <script src="{{ asset('AdminLTE/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+          $(".preloader").fadeOut();
+        })
+    </script>
     @stack('script')
 </body>
 

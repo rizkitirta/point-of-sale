@@ -19,6 +19,8 @@ class MemberController extends Controller
     public function index()
     {
 
+        //dd($kode);
+
         return view('member.index');
     }
 
@@ -33,7 +35,7 @@ class MemberController extends Controller
                 return '<input type="checkbox" name="id_member[]" value="' . $data->id . '">';
             })
             ->addColumn('kode', function ($data) {
-                return '<h5><span class="badge badge-secondary">' . $data->kode . '</span></h5>';
+                return '<h5><span class="badge badge-secondary">' . $data->kode_member . '</span></h5>';
             })
             ->addColumn('aksi', function ($data) {
                 return '
@@ -74,18 +76,14 @@ class MemberController extends Controller
         }
 
         //Auto numbering
-        $modelCount = Member::count();
-        $modelLast = Member::all()->last();
-        $get = $modelLast;
-        $query = $get->kode_member;
-
-        $number = autoNumber($modelCount,$modelLast,$query);
-        //dd($number);
+        $now = Carbon::now();
+        $number = $now->year . $now->month . $now->day;
+        $kode = $number . rand(1, 1000000);
 
         $data = Member::create([
             'nama' => $request->nama,
             'no_telpon' => $request->no_telpon,
-            'kode_member' => $number,
+            'kode_member' => $kode,
             'alamat' => $request->alamat,
         ]);
 
@@ -119,10 +117,9 @@ class MemberController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'nama' => 'required|unique:members,nama',
-            'kode' => 'required|unique:members,kode_member',
+            'nama' => 'required',
             'no_telpon' => 'required',
-            'kode' => 'required',
+            'alamat' => 'required',
         ];
 
         $message = [
@@ -138,8 +135,12 @@ class MemberController extends Controller
             return response()->json(['message' => $validator->errors()->first()], 422);
         }
 
-        $data = Member::find($id);
-        $data->update($request->all());
+        $data = Member::findOrFail($id);
+        $data->update([
+            'nama' => $request->nama,
+            'no_telpon' => $request->no_telpon,
+            'alamat' => $request->alamat,
+        ]);
 
         if ($data) {
             return response()->json(['message' => 'Data berhasil diupdate!'], 200);
@@ -168,6 +169,7 @@ class MemberController extends Controller
 
     public function deleteSelected(Request $request)
     {
+        //dd($request->all());
         foreach ($request->id_member as $id) {
             $member = Member::find($id);
             $member->delete();
@@ -176,15 +178,17 @@ class MemberController extends Controller
         return response()->json(['message' => 'Data Yang Dipilih Berhasil Dihapus!']);
     }
 
-    public function cetakBarcode(Request $request)
+    public function cetakMember(Request $request)
     {
-        $data = [];
+        $dataMember = collect(array());
         foreach ($request->id_member as $id) {
             $member = Member::find($id);
-            $data[] = $member;
+            $dataMember[] = $member;
         }
 
-        $pdf = PDF::loadView('member.barcode', compact('data'));
+        $dataMember = $dataMember->chunk(2);
+        //return $data;
+        $pdf = PDF::loadView('member.cetak', compact('dataMember'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('member.pdf');
     }

@@ -29,7 +29,7 @@ class KategoriController extends Controller
                 return '
             <div class="btn-group">
             <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('kategori.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('kategori.update', $data->id) . '`)"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('kategori.destroy', $data->id) . '`)"><i class="fas fa-trash"></i></button>
             </div>
             ';
             })
