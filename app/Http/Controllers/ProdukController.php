@@ -18,22 +18,11 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        $tanggal = Carbon::now()->format('Y-m-d');
         $now = Carbon::now();
-        $thn_bulan = $now->year . $now->month;
-        $cek_number = Produk::count();
-        if ($cek_number == 0) {
-            $no_urut = '';
-            $number = 'KD' . $thn_bulan . $no_urut;
-            //dd($number);
-        } else {
-            $get =  Produk::all()->last();
-            $no_urut = (int)substr($get->id, -4) + 1;
-            $number = 'KD' . $thn_bulan . $no_urut;
-        }
+        $kode = $now->year . rand(1, 1000000);
 
         $data = Kategori::all();
-        return view('produk.index', compact('data', 'number'));
+        return view('produk.index', compact('data', 'kode'));
     }
 
     public function data()
@@ -64,8 +53,8 @@ class ProdukController extends Controller
             ->addColumn('aksi', function ($data) {
                 return '
             <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('produk.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('produk.destroy', $data->id) . '`)"><i class="fas fa-trash"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="editForm(`' . route('produk.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="deleteData(`' . route('produk.destroy', $data->id) . '`)"><i class="fas fa-trash"></i></button>
             </div>
             ';
             })
@@ -85,7 +74,7 @@ class ProdukController extends Controller
             'nama_produk' => 'required|unique:produks,nama_produk',
             'merek' => 'required|string',
             'id_kategori' => 'required|integer',
-            'kode' => 'required|string',
+            'kode_produk' => 'required|string',
             'harga_beli' => 'required|integer',
             'harga_jual' => 'required|integer',
             'diskon' => 'required|integer',
@@ -97,7 +86,7 @@ class ProdukController extends Controller
             'merek.required' => ' Kolom merek tidak boleh kosong!',
             'id_kategori.required' => ' Kolom kategori tidak boleh kosong!',
             'id_kategori.integer' => ' Kolom kategori berupa integer!',
-            'kode.required' => ' Kolom kode tidak boleh kosong!',
+            'kode_produk.required' => ' Kolom kode tidak boleh kosong!',
             'harga_beli.required' => ' Kolom harga_beli tidak boleh kosong!',
             'harga_beli.integer' => ' Kolom harga beli berupa angka!',
             'harga_jual.required' => ' Kolom harga_jual tidak boleh kosong!',
@@ -184,7 +173,8 @@ class ProdukController extends Controller
             $data[] = $produk;
         }
 
-        $pdf = PDF::loadView('produk.barcode', compact('data'));
+        $no  = 1;
+        $pdf = PDF::loadView('produk.barcode', compact('data','no'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('produk.pdf');
     }

@@ -71,6 +71,14 @@
                           </p>
                       </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{ route('supplier.index') }}" class="nav-link">
+                      <i class="fas fa-id-card nav-icon"></i>
+                        <p>
+                            Supplier
+                        </p>
+                    </a>
+                </li>
               </ul>
           </nav>
           <!-- /.sidebar-menu -->

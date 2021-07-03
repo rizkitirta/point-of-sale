@@ -6,7 +6,6 @@ use App\Models\Member;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
@@ -40,8 +39,8 @@ class MemberController extends Controller
             ->addColumn('aksi', function ($data) {
                 return '
             <div class="btn-group">
-            <button class="btn btn-sm btn-primary" onclick="editForm(`' . route('member.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteData(`' . route('member.destroy', $data->id) . '`)"><i class="fas fa-trash"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="editForm(`' . route('member.update', $data->id) . '`)"><i class="fa fa-edit"></i></button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="deleteData(`' . route('member.destroy', $data->id) . '`)"><i class="fas fa-trash"></i></button>
             </div>
             ';
             })
@@ -124,8 +123,6 @@ class MemberController extends Controller
 
         $message = [
             'nama.required' => ' Kolom nama tidak boleh kosong!',
-            'kode.required' => ' Kolom nama tidak boleh kosong!',
-            'kode.unique' => ' Kode member sudah digunakan!',
             'no_telpon.required' => ' Kolom telpon tidak boleh kosong!',
             'alamat.required' => ' Kolom alamat tidak boleh kosong!',
         ];

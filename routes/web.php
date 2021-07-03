@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProdukController;
 use App\Models\User;
 
@@ -40,6 +41,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('member/cetak-member', [MemberController::class, 'cetakMember'])->name('member.cetak');
     Route::post('member/delete-selected', [MemberController::class, 'deleteSelected'])->name('member.deleteSelected');
     Route::resource('member', MemberController::class)->except(['create', 'edit']);
+
+    //Supplier
+    Route::get('supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
+    Route::resource('supplier', SupplierController::class)->except(['create', 'edit']);
 });
 
 // Route::get('user', function(){

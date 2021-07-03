@@ -40,9 +40,9 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="kode">Kode Produk</label>
-                                <input id="kode" class="form-control" type="text" name="kode" placeholder=""
-                                    value="{{ $number }}" readonly>
+                                <label for="kode_produk">Kode Produk</label>
+                                <input id="kode_produk" class="form-control" type="text" name="kode_produk" placeholder=""
+                                    value="{{ $kode }}" readonly>
                             </div>
                         </div>
                     </div>

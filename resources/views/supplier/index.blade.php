@@ -1,43 +1,34 @@
 @extends('layouts.master')
-@section('page', 'Member')
-@section('title', 'Member')
-@section('breadcrumb', 'Member')
+@section('page', 'Supplier')
+@section('title', 'Supplier')
+@section('breadcrumb', 'Supplier')
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header">
-                    <button type="button" onclick="deleteSelected('{{ route('member.deleteSelected') }}')"
-                        class="btn btn-danger shadow">
-                        <i class="fas fa-trash-alt"></i> Delete Selected</button>
-                    <button onclick="cetakMember('{{ route('member.cetak') }}')" class="btn btn-info"><i
-                            class="fas fa-id-card nav-icon"></i> Cetak Member</button>
-                    <button onclick="addForm('{{ route('member.store') }}')" class="btn btn-primary shadow float-right">
-                        <i class="fa fa-plus-circle"></i> Tambah</button>
-
+                    <button onclick="addForm('{{ route('supplier.store') }}')" class="btn btn-primary shadow float-right">
+                        <i class="fa fa-plus-circle"></i> Tambah
+                    </button>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post" id="form-member">
-                        @csrf
-                        <table class="table table-light table-responsive table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" name="select_all" id="select_all"></th>
-                                    <th width="5%">No</th>
-                                    <th>member</th>
-                                    <th>Kode</th>
-                                    <th>Telpon</th>
-                                    <th>Alamat</th>
-                                    <th width="5%">
-                                        <li class="fa fa-cog"></li>
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </form>
+                    <table class="table table-light table-responsive table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Supplier</th>
+                                <th>Kode Supplier</th>
+                                <th>Telpon</th>
+                                <th>Alamat</th>
+                                <th width="5%">
+                                    <li class="fa fa-cog"></li>
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -61,13 +52,9 @@
                 autoWidth: false,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('member.data') }}'
+                    url: '{{ route('supplier.data') }}'
                 },
-                columns: [{
-                        data: 'select_all',
-                        searchable: false,
-                        sortable: false,
-                    },
+                columns: [
                     {
                         data: 'DT_RowIndex',
                         searchable: false,
@@ -116,30 +103,30 @@
                         })
                         return;
                     })
-                }
-            })
+            }
+        })
 
 
         //Call add modal
         function addForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Tambah member')
+            $('#modal-form .modal-title').text('Tambah supplier')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('post')
-            $('#modal-form [name=nama]').focus()
+            $('#modal-form [name=nama_supplier]').focus()
         }
 
         //Call edit modal
         function editForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Edit member')
+            $('#modal-form .modal-title').text('Edit supplier')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('put')
-            $('#modal-form [name=nama]').focus()
+            $('#modal-form [name=nama_supplier]').focus()
 
             $.get(url)
                 .done((response) => {
@@ -151,7 +138,8 @@
                     alert('Terjadi Kesalahan!')
                     return;
                 })
-            }
+        }
+
 
         function deleteData(url) {
             Swal.fire({
@@ -178,9 +166,9 @@
                             alert('Data gagal dihapus!')
                             return;
                         })
-                    }
-                })
-            }
+                }
+            })
+        }
 
 
         //Select all checkbox
@@ -188,36 +176,5 @@
             $(':checkbox').prop('checked', this.checked)
         })
 
-        //Delete selected
-        function deleteSelected(url) {
-            if ($('input:checked').length > 1) {
-                if (confirm('Apakah anda yakin?')) {
-                    $.post(url, $('#form-member').serialize())
-                        .done((res) => {
-                            console.log(res)
-                            table.ajax.reload()
-                            Swal.fire('Deleted!', res.message, 'success')
-                        })
-                        .fail((error) => {
-                            console.log(res.message)
-                            alert('Tidak dapat mengahpus data!')
-                            return;
-                        })
-                    }
-                }
-            }
-
-        //Cetak member'
-        function cetakMember(url) {
-            if ($('input:checked').length < 1) {
-                alert('Pilih member yang akan dicetak!')
-                return;
-            } else {
-                $('#form-member')
-                    .attr('target', '_blank')
-                    .attr('action', url)
-                    .submit()
-                }
-            }
     </script>
 @endpush
