@@ -1,13 +1,14 @@
 @extends('layouts.master')
-@section('page', 'Supplier')
-@section('title', 'Supplier')
-@section('breadcrumb', 'Supplier')
+@section('page', 'Pengeluaran')
+@section('title', 'Pengeluaran')
+@section('breadcrumb', 'Pengeluaran')
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header">
-                    <button onclick="addForm('{{ route('supplier.store') }}')" class="btn btn-primary shadow float-right">
+                    <button onclick="addForm('{{ route('pengeluaran.store') }}')"
+                        class="btn btn-primary shadow float-right">
                         <i class="fa fa-plus-circle"></i> Tambah
                     </button>
                 </div>
@@ -16,10 +17,9 @@
                         <thead>
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Supplier</th>
-                                <th>Kode Supplier</th>
-                                <th>Telpon</th>
-                                <th>Alamat</th>
+                                <th>Tanggal</th>
+                                <th>Nominal</th>
+                                <th>Deskripsi</th>
                                 <th width="5%">
                                     <li class="fa fa-cog"></li>
                                     Aksi
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    @include('supplier.form')
+    @include('pengeluaran.form')
 @endsection
 @push('script')
     <script>
@@ -52,25 +52,21 @@
                 autoWidth: false,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('supplier.data') }}'
+                    url: '{{ route('pengeluaran.data') }}'
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'DT_RowIndex',
                         searchable: false,
                         sortable: false
                     },
                     {
-                        data: 'nama'
+                        data: 'created_at'
                     },
                     {
-                        data: 'kode'
+                        data: 'nominal'
                     },
                     {
-                        data: 'no_telpon'
-                    },
-                    {
-                        data: 'alamat'
+                        data: 'deskripsi'
                     },
                     {
                         data: 'aksi',
@@ -103,42 +99,41 @@
                         })
                         return;
                     })
-            }
-        })
+                }
+            })
 
 
         //Call add modal
         function addForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Tambah supplier')
+            $('#modal-form .modal-title').text('Tambah Pengeluaran')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('post')
-            $('#modal-form [name=nama_supplier]').focus()
+            $('#modal-form [name=deskripsi]').focus()
         }
 
         //Call edit modal
         function editForm(url) {
             $('#modal-form').modal('show')
-            $('#modal-form .modal-title').text('Edit supplier')
+            $('#modal-form .modal-title').text('Edit Pengeluaran')
 
             $('#modal-form form')[0].reset()
             $('#modal-form form').attr('action', url)
             $('#modal-form [name=_method]').val('put')
-            $('#modal-form [name=nama_supplier]').focus()
+            $('#modal-form [name=deskripsi]').focus()
 
             $.get(url)
                 .done((response) => {
-                    $('#modal-form [name="nama"]').val(response.nama)
-                    $('#modal-form [name="no_telpon"]').val(response.no_telpon)
-                    $('#modal-form [name="alamat"]').val(response.alamat)
+                    $('#modal-form [name="deskripsi"]').val(response.deskripsi)
+                    $('#modal-form [name="nominal"]').val(response.nominal)
                 })
                 .fail((errors) => {
-                    alert('Terjadi Kesalahan!')
+                    alert('Ups Terjadi Kesalahan!')
                     return;
                 })
-        }
+            }
 
 
         function deleteData(url) {
@@ -166,15 +161,8 @@
                             alert('Data gagal dihapus!')
                             return;
                         })
-                }
-            })
-        }
-
-
-        //Select all checkbox
-        $('[name=select_all]').click(function() {
-            $(':checkbox').prop('checked', this.checked)
-        })
-
+                    }
+                })
+            }
     </script>
 @endpush

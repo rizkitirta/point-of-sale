@@ -6,6 +6,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\PengeluaranController;
 use App\Models\User;
 
 /*
@@ -45,6 +46,10 @@ Route::group(['middleware' => 'auth'], function () {
     //Supplier
     Route::get('supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
     Route::resource('supplier', SupplierController::class)->except(['create', 'edit']);
+
+    //Supplier
+    Route::get('pengeluaran/data', [PengeluaranController::class, 'data'])->name('pengeluaran.data');
+    Route::resource('pengeluaran', PengeluaranController::class)->except(['create', 'edit']);
 });
 
 // Route::get('user', function(){

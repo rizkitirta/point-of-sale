@@ -47,6 +47,7 @@
                           </p>
                       </a>
                   </li>
+                  <li class="nav-header">MASTER</li>
                   <li class="nav-item">
                       <a href="{{ route('kategori.index') }}" class="nav-link">
                           <i class="fas fa-cube nav-icon"></i>
@@ -57,7 +58,7 @@
                   </li>
                   <li class="nav-item">
                       <a href="{{ route('produk.index') }}" class="nav-link">
-                          <i class="fas fa-cube nav-icon"></i>
+                        <i class="fas fa-coins nav-icon"></i>
                           <p>
                               Produk
                           </p>
@@ -73,9 +74,18 @@
                   </li>
                   <li class="nav-item">
                     <a href="{{ route('supplier.index') }}" class="nav-link">
-                      <i class="fas fa-id-card nav-icon"></i>
+                        <i class="fas fa-truck nav-icon"></i>
                         <p>
                             Supplier
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">TRANSAKSI</li>
+                <li class="nav-item">
+                    <a href="{{ route('pengeluaran.index') }}" class="nav-link">
+                        <i class="fas fa-money-bill-wave nav-icon"></i>
+                        <p>
+                            Pengeluaran
                         </p>
                     </a>
                 </li>
